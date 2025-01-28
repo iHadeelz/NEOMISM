@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Bot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .chat-container {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .messages {
+      height: 300px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .input-container {
+      display: flex;
+      gap: 10px;
+    }
+    input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <h2>Chat Bot</h2>
+    <div class="messages" id="messages"></div>
+    <div class="input-container">
+      <input type="text" id="messageInput" placeholder="Type your message here...">
+      <button id="sendButton">Send</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js"></script>
+  <script>
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6pzBFkIF6RV9rDSrX2C-Sa2xI2hBiVrE",
+      authDomain: "neom-web.firebaseapp.com",
+      projectId: "neom-web",
+      storageBucket: "neom-web.appspot.com",
+      messagingSenderId: "881751642763",
+      appId: "1:881751642763:web:d961fbe97db49c90c2ba8e",
+      measurementId: "G-4MLT5VWXNT"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const messagesDiv = document.getElementById("messages");
+    const messageInput = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+
+    // معرف المستخدم (البريد الإلكتروني)
+    const userEmail = "hadeel32000@gmail.com"; // يجب تعيينه بناءً على المستخدم الحالي
+
+    // إنشاء محادثة إذا لم تكن موجودة
+    function createConversationIfNotExists() {
+      const conversationRef = db.collection("conversations").doc(userEmail);
+
+      conversationRef.get().then(doc => {
+        if (!doc.exists) {
+          conversationRef.set({
+            userId: userEmail,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastMessage: ""
+          });
+        }
+      });
+    }
+
+    // جلب الرسائل من المجموعة الفرعية "messages"
+    function loadMessages() {
+      const messagesRef = db.collection("conversations").doc(userEmail).collection("messages");
+
+      messagesRef.orderBy("timestamp", "asc").onSnapshot(snapshot => {
+        messagesDiv.innerHTML = ""; // مسح الرسائل القديمة
+        snapshot.forEach(doc => {
+          const message = doc.data();
+          const div = document.createElement("div");
+          div.classList.add("message");
+          div.textContent = `${message.sender}: ${message.text}`;
+          messagesDiv.appendChild(div);
+        });
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // تمرير تلقائي للأسفل
+      });
+    }
+
+    // الحصول على رد البوت من OpenAI
+    async function getBotResponse(userInput) {
+      const apiKey = "YOUR_OPENAI_API_KEY"; // ضع هنا مفتاح OpenAI API
+
+      const response = await fetch("https://api.openai.com/v1/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: "text-davinci-003",
+          prompt: userInput,
+          max_tokens: 100,
+        }),
+      });
+
+      const data = await response.json();
+      return data.choices[0].text.trim();
+    }
+
+    // إرسال رسالة جديدة إلى المجموعة الفرعية "messages"
+    sendButton.addEventListener("click", async () => {
+      const text = messageInput.value.trim();
+      if (text) {
+        const conversationRef = db.collection("conversations").doc(userEmail);
+
+        // إضافة رسالة المستخدم
+        conversationRef.collection("messages").add({
+          text: text,
+          sender: "User",
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        // تحديث آخر رسالة
+        conversationRef.update({
+          lastMessage: text,
+        });
+
+        // الحصول على رد البوت من OpenAI
+        const botResponse = await getBotResponse(text);
+
+        // إضافة رد البوت
+        conversationRef.collection("messages").add({
+          text: botResponse,
+          sender: "Bot",
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        messageInput.value = "";
+      }
+    });
+
+    // البدء
+    createConversationIfNotExists();
+    loadMessages();
+  </script>
+</body>
+</html>

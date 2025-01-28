@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy and Security</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #cce7ff, #e6f3ff);
+      color: #333;
+      direction: ltr;
+    }
+
+    .header {
+      background-color: #0077B6;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header .logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+      animation: bounce 2s infinite;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: white;
+      color: #0077B6;
+      border: 1px solid #0077B6;
+      border-radius: 5px;
+      padding: 7px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .language-switch:hover {
+      background-color: #0077B6;
+      color: white;
+    }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #0077B6;
+      color: white;
+      border: 1px solid #0077B6;
+      border-radius: 5px;
+      padding: 7px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+  
+
+    .back-button:hover {
+      background-color: #0077B6;
+      color: white;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      color: #0077B6;
+      margin-bottom: 15px;
+    }
+
+    .content {
+      margin-bottom: 15px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #0077B6;
+      color: white;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <div class="header">
+    <a href="setting.html" class="back-button">Back to Settings</a>
+    <img class="logo" src="logo1.png" alt="Neomism Logo">
+    <h1>Privacy and Security</h1>
+    <button class="language-switch" onclick="toggleLanguage()">عربي</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container" id="content-container">
+    <!-- Privacy Section -->
+    <div class="section">
+      <div class="section-title" data-en="Privacy Settings" data-ar="إعدادات الخصوصية">Privacy Settings</div>
+      <div class="content" data-en="Users have full control over their personal data. The platform allows users to access, edit, or delete their stored information at any time to ensure their privacy preferences are respected." data-ar="يتمتع المستخدمون بالتحكم الكامل في بياناتهم الشخصية. يتيح النظام للمستخدمين الوصول إلى معلوماتهم وتعديلها أو حذفها في أي وقت لضمان احترام تفضيلات الخصوصية الخاصة بهم.">
+        Users have full control over their personal data. The platform allows users to access, edit, or delete their stored information at any time to ensure their privacy preferences are respected.
+      </div>
+      <div class="content" data-en="The platform maintains detailed activity logs to help users monitor their actions. These logs include account logins, bookings, and other interactions for transparency and security." data-ar="يحتفظ النظام بسجلات نشاط تفصيلية لمساعدة المستخدمين على مراقبة أنشطتهم. تشمل هذه السجلات تسجيلات الدخول والحجوزات والتفاعلات الأخرى لضمان الشفافية والأمان.">
+        The platform maintains detailed activity logs to help users monitor their actions. These logs include account logins, bookings, and other interactions for transparency and security.
+      </div>
+    </div>
+
+    <!-- Security Section -->
+    <div class="section">
+      <div class="section-title" data-en="Security Settings" data-ar="إعدادات الأمان">Security Settings</div>
+      <div class="content" data-en="Users can update their account password at any time. The system enforces strong password requirements to protect accounts from unauthorized access." data-ar="يمكن للمستخدمين تحديث كلمة المرور لحساباتهم في أي وقت. يفرض النظام متطلبات كلمة مرور قوية لحماية الحسابات من الوصول غير المصرح به.">
+        Users can update their account password at any time. The system enforces strong password requirements to protect accounts from unauthorized access.
+      </div>
+      <div class="content" data-en="Two-factor authentication adds an extra layer of security by requiring a verification code in addition to the password during login." data-ar="يوفر التحقق بخطوتين طبقة إضافية من الأمان من خلال طلب رمز تحقق بالإضافة إلى كلمة المرور عند تسجيل الدخول.">
+        Two-factor authentication adds an extra layer of security by requiring a verification code in addition to the password during login.
+      </div>
+    </div>
+
+    <!-- Additional Clauses Section -->
+    <div class="section">
+      <div class="section-title" data-en="Additional Security Measures" data-ar="تدابير أمنية إضافية">Additional Security Measures</div>
+      <div class="content" data-en="All sensitive user data is encrypted during transmission and storage to prevent unauthorized access or breaches." data-ar="يتم تشفير جميع بيانات المستخدم الحساسة أثناء الإرسال والتخزين لمنع الوصول غير المصرح به أو الاختراقات.">
+        All sensitive user data is encrypted during transmission and storage to prevent unauthorized access or breaches.
+      </div>
+      <div class="content" data-en="The application complies with local laws and regulations, including data privacy and environmental protection standards." data-ar="يتوافق التطبيق مع القوانين واللوائح المحلية، بما في ذلك قوانين حماية البيانات ومعايير حماية البيئة.">
+        The application complies with local laws and regulations, including data privacy and environmental protection standards.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer">
+    © 2024 Privacy and Security | All rights reserved.
+  </div>
+
+  <script>
+    let isArabic = false;
+
+    function toggleLanguage() {
+      isArabic = !isArabic;
+      const lang = isArabic ? 'ar' : 'en';
+      document.body.style.direction = isArabic ? 'rtl' : 'ltr';
+      document.querySelector('.language-switch').textContent = isArabic ? 'English' : 'عربي';
+
+      document.querySelectorAll('[data-en]').forEach(element => {
+        element.textContent = element.getAttribute(`data-${lang}`);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQs</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #cce7ff, #e6f3ff);
+      color: #333;
+      direction: ltr;
+    }
+
+    .header {
+      background-color: #0077B6;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header .logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+      animation: bounce 2s infinite;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: white;
+      color: #0077B6;
+      border: 1px solid #0077B6;
+      border-radius: 5px;
+      padding: 7px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .language-switch:hover {
+      background-color: #0077B6;
+      color: white;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+    }
+
+    .faq-question {
+      font-size: 18px;
+      font-weight: bold;
+      color: #0077B6;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .faq-question:hover {
+      color: #005f8a;
+    }
+
+    .faq-answer {
+      display: none;
+      margin-top: 10px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #0077B6;
+      color: white;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #0077B6;
+      color: white;
+      border: 1px solid #0077B6;
+      border-radius: 5px;
+      padding: 7px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <div class="header">
+    <a href="setting.html" class="back-button">Back to Settings</a>
+    <img class="logo" src="logo1.png" alt="Neomism Logo">
+    <h1>FAQs</h1>
+    <button class="language-switch" onclick="toggleLanguage()">عربي</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container" id="content-container">
+    <!-- FAQ List -->
+    <div class="faq-item">
+      <div class="faq-question" data-en="What is NEOMISM?" data-ar="ما هو NEOMISM؟">What is NEOMISM?</div>
+      <div class="faq-answer" data-en="NEOMISM is an innovative platform for seamless booking and eco-tourism." data-ar="NEOMISM هو منصة مبتكرة للحجوزات السهلة والسياحة البيئية.">
+        NEOMISM is an innovative platform for seamless booking and eco-tourism.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" data-en="How do I book activities or accommodations?" data-ar="كيف يمكنني حجز الأنشطة أو الإقامات؟">How do I book activities or accommodations?</div>
+      <div class="faq-answer" data-en="You can book through our official website or mobile application." data-ar="يمكنك الحجز من خلال موقعنا الرسمي أو التطبيق.">
+        You can book through our official website or mobile application.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" data-en="What should I do if my payment fails?" data-ar="ماذا عليك فعله إذا فشل الدفع؟">What should I do if my payment fails?</div>
+      <div class="faq-answer" data-en="Check your payment details or try another method. Contact support if the issue persists." data-ar="تحقق من تفاصيل الدفع أو جرب طريقة أخرى. اتصل بالدعم إذا استمرت المشكلة.">
+        Check your payment details or try another method. Contact support if the issue persists.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" data-en="How can I contact support?" data-ar="كيف يمكنني التواصل مع الدعم؟">How can I contact support?</div>
+      <div class="faq-answer" data-en="You can reach us via email or through our support hotline." data-ar="يمكنك التواصل معنا عبر البريد الإلكتروني أو من خلال الخط الساخن.">
+        You can reach us via email or through our support hotline.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" data-en="Does NEOMISM support eco-tourism?" data-ar="هل يدعم NEOMISM السياحة البيئية؟">Does NEOMISM support eco-tourism?</div>
+      <div class="faq-answer" data-en="Yes, NEOMISM focuses on promoting sustainable and eco-friendly tourism." data-ar="نعم، يركز NEOMISM على تعزيز السياحة المستدامة والصديقة للبيئة.">
+        Yes, NEOMISM focuses on promoting sustainable and eco-friendly tourism.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" data-en="How do I update my profile?" data-ar="كيف يمكنني تحديث ملفي الشخصي؟">How do I update my profile?</div>
+      <div class="faq-answer" data-en="Go to the profile settings section in your account to update your information." data-ar="اذهب إلى قسم إعدادات الملف الشخصي في حسابك لتحديث معلوماتك.">
+        Go to the profile settings section in your account to update your information.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" data-en="Can I receive notifications for my bookings?" data-ar="هل يمكنني تلقي إشعارات لحجوزاتي؟">Can I receive notifications for my bookings?</div>
+      <div class="faq-answer" data-en="Yes, you can enable notifications in your account settings." data-ar="نعم، يمكنك تفعيل الإشعارات في إعدادات حسابك.">
+        Yes, you can enable notifications in your account settings.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer">
+    © 2024 FAQs | All rights reserved.
+  </div>
+
+  <script>
+    // Language Toggle
+    let isArabic = false;
+
+    function toggleLanguage() {
+      isArabic = !isArabic;
+      const lang = isArabic ? 'ar' : 'en';
+      document.body.style.direction = isArabic ? 'rtl' : 'ltr';
+      document.querySelector('.language-switch').textContent = isArabic ? 'English' : 'عربي';
+
+      document.querySelectorAll('[data-en]').forEach(element => {
+        element.textContent = element.getAttribute(`data-${lang}`);
+      });
+    }
+
+    // Collapsible Answers
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const answer = question.nextElementSibling;
+        answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+  </script>
+</body>
+</html>

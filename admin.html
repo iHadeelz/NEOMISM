@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .admin-header {
+            background-color: #0077B6;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+        }
+
+        .admin-header button {
+            background-color: #005f8a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #005f8a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0077B6;
+            color: white;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        form input, form textarea, form button, form select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        form button {
+            background-color: #0077B6;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .modal-header button {
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            width: 150px;
+            height: auto;
+        }
+
+        .login-container .login-link {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .login-container .login-link a {
+            color: #0077B6;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .login-container .login-link a:hover {
+            color: #005f8a;
+            text-decoration: underline;
+        }
+        #charts-section {
+    margin: 30px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+#charts-section h2 {
+    text-align: center;
+    color: #0077B6;
+}
+
+#charts-section div {
+    margin: 20px auto;
+    text-align: center;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+    margin: 10px auto;
+}
+#charts-section {
+    margin: 30px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+#charts-section h2 {
+    text-align: center;
+    color: #0077B6;
+}
+
+#charts-section div {
+    margin: 20px auto;
+    text-align: center;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+    margin: 10px auto;
+}
+#charts-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+    flex: 1 1 calc(50% - 20px); /* يتيح عرض الرسمين بجانب بعض مع وجود مسافة بينهما */
+    max-width: 500px;
+    margin: 10px;
+    text-align: center;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container h3 {
+    margin-bottom: 10px;
+    color: #0077B6;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <div class="logo-container">
+            <img src="logo1.png" alt="Neomism Logo" class="logo">
+        </div>
+        <button id="logout-btn">Logout</button>
+    </header>
+
+    <main>
+        <section class="section" id="users-section">
+            <h2>Users Management</h2>
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Country</th>
+                        <th>Created At</th>
+                        <th>Last Login</th>
+                        <th>Date of Birth</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+            
+        </section>
+
+        <section class="section" id="data-section">
+            <h2>Data Management</h2>
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>email</th>
+                        <th>Price</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data dynamically loaded -->
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>Add New Entry</h2>
+            <form id="add-form">
+                <input type="text" id="name" placeholder="Name" required>
+                <textarea id="description" placeholder="Description" required></textarea>
+                <input type="text" id="location" placeholder="Location (e.g., Riyadh, Saudi Arabia)" required>
+                <input type="text" id="email" placeholder="(info@example.com)" required>
+                <input type="text" id="price" placeholder="Price (e.g., 100)" required>
+                <input type="text" id="images" placeholder="Image URL" required>
+                <select id="type">
+                    <option value="Hotels">Hotel</option>
+                    <option value="Restaurants">Restaurant</option>
+                    <option value="Islands">Island</option>
+                </select>
+                <button type="submit">Add</button>
+            </form>
+        </section>
+
+        <div class="modal" id="edit-modal">
+            <div class="modal-header">
+                <h2>Edit Entry</h2>
+                <button id="close-modal">&times;</button>
+            </div>
+            <form id="edit-form">
+                <input type="text" id="edit-name" placeholder="Name" required>
+                <textarea id="edit-description" placeholder="Description" required></textarea>
+                <input type="text" id="edit-location" placeholder="Location" required>
+                <input type="number" id="edit-price" placeholder="Price">
+                <label for="editFileInput">Upload New Image:</label>
+                <input type="file" id="editFileInput" accept="image/*">
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+
+        <section class="section" id="problems-section">
+            <h2>Problems Management</h2>
+            <table id="problems-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Description</th>
+                        <th>Timestamp</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Charts</h2>
+            <div style="display: flex; justify-content: space-around;">
+                <div>
+                    <h3>Users by Country</h3>
+                    <canvas id="countryChart" width="400" height="400"></canvas>
+                </div>
+                <div>
+                    <h3>Users by Gender</h3>
+                    <canvas id="genderChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <h1>Credit Card Management</h1>
+        <table id="cards-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Bank Name</th>
+                    <th>Card Holder Name</th>
+                    <th>Card Number</th>
+                    <th>created At</th>
+                    <th>cvc</th>
+                    <th>Expired Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- data will be added here -->
+            </tbody>
+        </table>
+
+        <h1>Bookings Information</h1>
+        <table id="bookings-table">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Event Location</th>
+                    <th>Date</th>
+                    <th>Number of Guests</th>
+                    <th>Total Price</th>
+                    <th>Full Name</th>
+                    <th>Phone Number</th>
+                    <th>Bank Name</th>
+                    <th>Card Holder</th>
+                    <th>Card Ends</th>
+                    <th>Payment Date</th>
+                    <th>Booking Status</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+        <section id="charts-section">
+            <h2>Booking Status Charts</h2>
+            <div>
+                <h3>Booking Status Distribution</h3>
+                <canvas id="bookingStatusChart" width="400" height="400"></canvas>
+            </div>
+            <div>
+                <h3>Cancelled Bookings Breakdown</h3>
+                <canvas id="cancelledByChart" width="400" height="400"></canvas>
+            </div>
+        </section>
+        
+    </main>
+    <canvas id="userChart" width="400" height="400"></canvas>
+
+    
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+        // Firebase configuration for Users (neom-web)
+        const firebaseConfigUsers = {
+          apiKey: "AIzaSyB6pzBFkIF6RV9rDSrX2C-Sa2xI2hBiVrE",
+          authDomain: "neom-web.firebaseapp.com",
+          databaseURL: "https://neom-web-default-rtdb.firebaseio.com",
+          projectId: "neom-web",
+          storageBucket: "neom-web.appspot.com",
+          messagingSenderId: "881751642763",
+          appId: "1:881751642763:web:d961fbe97db49c90c2ba8e"
+        };
+
+        // Firebase configuration for Hotels, Restaurants (fani-betak)
+        const firebaseConfigData = {
+            apiKey: "AIzaSyC14xc6J0t_AI2RP2a_kuBOMI47hWqG3dg",
+            authDomain: "fani-betak.firebaseapp.com",
+            projectId: "fani-betak",
+            storageBucket: "fani-betak.appspot.com",
+            messagingSenderId: "346650563668",
+            appId: "1:346650563668:web:2fb84733de91dea06589c1",
+            measurementId: "G-YYZ6NS34SH"
+        };
+
+        // Initialize Firebase apps
+        const appUsers = initializeApp(firebaseConfigUsers, "UsersApp");
+        const authUsers = getAuth(appUsers);
+        const dbUsers = getFirestore(appUsers);
+
+        const appData = initializeApp(firebaseConfigData, "DataApp");
+        const dbData = getFirestore(appData);
+
+        // نحتاج لإنشاء تطبيق منفصل لـ neom-web إذا كان BOOKING فيه
+        // نستخدم نفس config الخاص بـ neom-web (firebaseConfigUsers)
+        // لأن الـ BOOKING في neom-web
+        const dbNeom = dbUsers; // طالما الـ BOOKING في نفس neom-web، سنستخدم dbUsers
+
+        const editModal = document.getElementById("edit-modal");
+        const closeModalButton = document.getElementById("close-modal");
+        let currentItemId = null;
+        let currentCollection = null;
+
+        // Logout
+        document.getElementById("logout-btn").addEventListener("click", () => {
+            signOut(authUsers).then(() => {
+                alert("Logged out!");
+                window.location.href = "login.html";
+            }).catch((error) => {
+                console.error("Error logging out:", error);
+            });
+        });
+
+        function formatTimestampAsString(timestamp) {
+            if (timestamp && timestamp.seconds) {
+                const date = new Date(timestamp.seconds * 1000);
+                return date.toISOString();
+            }
+            return "No Data";
+        }
+
+        function createTableRow(user, docId) {
+            return `
+                <tr>
+                    <td>${user.firstName || "No Data"}</td>
+                    <td>${user.lastName || "No Data"}</td>
+                    <td>${user.email || "No Data"}</td>
+                    <td>${user.gender || "No Data"}</td>
+                    <td>${user.phone || "No Data"}</td>
+                    <td>${user.country || "No Data"}</td>
+                    <td>${user.createdAt || "No Data"}</td>
+                    <td>${user.lastLogin || "No Data"}</td>
+                    <td>${user.dob || "No Data"}</td>
+                    <td>
+                        <button class="delete-user-btn" data-id="${docId}">Delete</button>
+                    </td>
+                </tr>
+            `;
+        }
+
+        async function fetchUsers() {
+            const usersTableBody = document.querySelector("#users-table tbody");
+            usersTableBody.innerHTML = "";
+
+            try {
+                const querySnapshot = await getDocs(collection(dbUsers, "users"));
+                querySnapshot.forEach((docSnapshot) => {
+                    const user = docSnapshot.data();
+                    const row = createTableRow(user, docSnapshot.id);
+                    usersTableBody.innerHTML += row;
+                });
+
+                document.querySelectorAll(".delete-user-btn").forEach((button) => {
+                    button.addEventListener("click", async () => {
+                        const id = button.dataset.id;
+                        await deleteDoc(doc(dbUsers, "users", id));
+                        fetchUsers();
+                    });
+                });
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        }
+
+        async function fetchData() {
+            const dataTableBody = document.querySelector("#data-table tbody");
+            dataTableBody.innerHTML = "";
+            const collections = ["Hotels", "Restaurants", "Islands"];
+
+            for (const collectionName of collections) {
+                const querySnapshot = await getDocs(collection(dbData, collectionName));
+                querySnapshot.forEach((docSnapshot) => {
+                    const data = docSnapshot.data();
+                    const row = `
+                        <tr>
+                            <td>${data.name}</td>
+                            <td>${data.description}</td>
+                            <td>${data.location || "N/A"}</td>
+                             <td>${data.email || "N/A"}</td>
+                            <td>${data.price || "N/A"}</td>
+                            <td>${collectionName}</td>
+                            <td>
+                                <button class="edit-btn" data-id="${docSnapshot.id}" data-collection="${collectionName}">Edit</button>
+                                <button class="delete-btn" data-id="${docSnapshot.id}" data-collection="${collectionName}">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                    dataTableBody.innerHTML += row;
+                });
+            }
+
+            document.querySelectorAll(".edit-btn").forEach((button) => {
+                button.addEventListener("click", (e) => {
+                    currentItemId = button.dataset.id;
+                    currentCollection = button.dataset.collection;
+                    showEditModal();
+                });
+            });
+
+            document.querySelectorAll(".delete-btn").forEach((button) => {
+                button.addEventListener("click", async (e) => {
+                    const id = button.dataset.id;
+                    const collectionName = button.dataset.collection;
+                    await deleteDoc(doc(dbData, collectionName, id));
+                    fetchData();
+                });
+            });
+        }
+
+        function showEditModal() {
+            editModal.classList.add("active");
+        }
+
+        closeModalButton.addEventListener("click", () => {
+            editModal.classList.remove("active");
+            currentItemId = null;
+            currentCollection = null;
+        });
+
+        document.getElementById("edit-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const updatedData = {
+                name: document.getElementById("edit-name").value,
+                description: document.getElementById("edit-description").value,
+                email: document.getElementById("edit-email").value,
+                location: document.getElementById("edit-location").value,
+                price: document.getElementById("edit-price").value,
+            };
+
+            if (currentItemId && currentCollection) {
+                const db = currentCollection === "users" ? dbUsers : dbData;
+                await updateDoc(doc(db, currentCollection, currentItemId), updatedData);
+                fetchData();
+                editModal.classList.remove("active");
+                currentItemId = null;
+                currentCollection = null;
+            }
+        });
+
+        document.getElementById("add-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("name").value;
+            const description = document.getElementById("description").value;
+            const location = document.getElementById("location").value;
+            const email = document.getElementById("email").value; // قراءة قيمة البريد الإلكتروني
+            const price = document.getElementById("price").value;
+            const imageUrl = document.getElementById("images").value;
+            const type = document.getElementById("type").value;
+
+            const newEntry = { name, description, location, price, images: imageUrl };
+
+            await addDoc(collection(dbData, type), newEntry);
+            fetchData();
+            e.target.reset();
+        });
+
+        async function fetchProblems() {
+            const problemsTableBody = document.querySelector("#problems-table tbody");
+            problemsTableBody.innerHTML = "";
+
+            const querySnapshot = await getDocs(collection(dbUsers, "problems"));
+            querySnapshot.forEach((docSnapshot) => {
+                const problem = docSnapshot.data();
+                const row = `
+                    <tr>
+                        <td>${problem.name || "N/A"}</td>
+                        <td>${problem.email || "N/A"}</td>
+                        <td>${problem.description || "N/A"}</td>
+                        <td>${problem.timestamp || "N/A"}</td>
+                        <td>
+                            <button class="edit-problem-btn" data-id="${docSnapshot.id}">Edit</button>
+                            <button class="delete-problem-btn" data-id="${docSnapshot.id}">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                problemsTableBody.innerHTML += row;
+            });
+
+            document.querySelectorAll(".edit-problem-btn").forEach((button) => {
+                button.addEventListener("click", (e) => {
+                    currentItemId = button.dataset.id;
+                    currentCollection = "problems";
+                    showEditModal();
+                });
+            });
+
+            document.querySelectorAll(".delete-problem-btn").forEach((button) => {
+                button.addEventListener("click", async (e) => {
+                    const id = button.dataset.id;
+                    await deleteDoc(doc(dbUsers, "problems", id));
+                    fetchProblems();
+                });
+            });
+        }
+
+        async function generateCharts() {
+            const countryCounts = {};
+            const genderCounts = { Male: 0, Female: 0, Other: 0 };
+
+            try {
+                const querySnapshot = await getDocs(collection(dbUsers, "users"));
+                querySnapshot.forEach((doc) => {
+                    const user = doc.data();
+                    const country = user.country || "Unknown";
+                    countryCounts[country] = (countryCounts[country] || 0) + 1;
+
+                    const gender = user.gender || "Other";
+                    genderCounts[gender] = (genderCounts[gender] || 0) + 1;
+                });
+
+                renderCountryChart(countryCounts);
+                renderGenderChart(genderCounts);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        }
+
+        function renderCountryChart(data) {
+            const ctx = document.getElementById("countryChart").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: [
+                            "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderGenderChart(data) {
+            const ctx = document.getElementById("genderChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: "Gender Distribution",
+                        data: Object.values(data),
+                        backgroundColor: [
+                            "#36A2EB", "#FF6384", "#FFCE56"
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        async function fetchCards() {
+            const cardsTableBody = document.querySelector("#cards-table tbody");
+            cardsTableBody.innerHTML = "";
+
+            try {
+                const querySnapshot = await getDocs(collection(dbUsers, "Cards"));
+                querySnapshot.forEach((docSnapshot) => {
+                    const card = docSnapshot.data();
+                    const row = `
+                        <tr>
+                            <td>${card.email || "N/A"}</td>
+                            <td>${card.bankName || "N/A"}</td>
+                            <td>${card.cardHolderName || "N/A"}</td>
+                            <td>${card.cardNumber || "N/A"}</td>
+                            <td>${card.createdAt || "N/A"}</td>
+                            <td>${card.cvc || "N/A"}</td>
+                            <td>${card.expiryDate || "N/A"}</td>
+                            <td>
+                                <button class="delete-btn" data-id="${docSnapshot.id}">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                    cardsTableBody.innerHTML += row;
+                });
+
+                document.querySelectorAll(".delete-btn").forEach((button) => {
+                    button.addEventListener("click", async (e) => {
+                        const cardId = e.target.dataset.id;
+                        try {
+                            await deleteDoc(doc(dbUsers, "Cards", cardId));
+                            alert("Card deleted successfully!");
+                            fetchCards();
+                        } catch (error) {
+                            console.error("Error deleting card:", error);
+                            alert("Failed to delete card.");
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error("Error fetching cards:", error);
+            }
+        }
+
+        async function fetchBookings() {
+    const bookingsTableBody = document.querySelector("#bookings-table tbody");
+    bookingsTableBody.innerHTML = "";
+
+    const bookingStatusCounts = { Pending: 0, Accepted: 0, Cancelled: 0, Completed: 0 };
+    const cancelledBy = { Admin: 0, User: 0 };
+
+    try {
+        // جلب البيانات من Firebase
+        const querySnapshot = await getDocs(collection(dbNeom, "BOOKING"));
+        querySnapshot.forEach((docSnapshot) => {
+            const booking = docSnapshot.data();
+            const paymentDate = booking.payment_date && booking.payment_date.toDate
+                ? booking.payment_date.toDate().toLocaleString()
+                : "N/A";
+
+            // عرض البيانات في الجدول
+            const row = `
+                <tr>
+                    <td>${booking.event_name || "N/A"}</td>
+                    <td>${booking.event_location || "N/A"}</td>
+                    <td>${booking.date || "N/A"}</td>
+                    <td>${booking.number_of_guests || "N/A"}</td>
+                    <td>${booking.total_price || "N/A"}</td>
+                    <td>${booking.full_name || "N/A"}</td>
+                    <td>${booking.phone_number || "N/A"}</td>
+                    <td>${booking.bank_name || "N/A"}</td>
+                    <td>${booking.card_holder || "N/A"}</td>
+                    <td>${booking.card_number_ends || "N/A"}</td>
+                    <td>${paymentDate}</td>
+                    <td>
+                        <select class="status-dropdown" data-id="${docSnapshot.id}">
+                            <option value="Pending" ${booking.booking_status === "Pending" ? "selected" : ""}>Pending</option>
+                            <option value="Accepted" ${booking.booking_status === "Accepted" ? "selected" : ""}>Accepted</option>
+                            <option value="Cancelled" ${booking.booking_status === "Cancelled" ? "selected" : ""}>Cancelled</option>
+                            <option value="Completed" ${booking.booking_status === "Completed" ? "selected" : ""}>Completed</option>
+                        </select>
+                    </td>
+                    <td>${booking.email || "N/A"}</td>
+                    <td>
+                        <button class="delete-booking-btn" data-id="${docSnapshot.id}">Delete</button>
+                    </td>
+                </tr>
+            `;
+            bookingsTableBody.innerHTML += row;
+
+            // تحديث إحصائيات الرسوم البيانية
+            const status = booking.booking_status || "Unknown";
+            bookingStatusCounts[status]++;
+
+            if (status === "Cancelled") {
+                const cancelledByType = booking.email.includes("admin") ? "Admin" : "User";
+                cancelledBy[cancelledByType]++;
+            }
+        });
+
+        // تحديث الرسوم البيانية
+        renderBookingStatusChart(bookingStatusCounts, cancelledBy);
+
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+    }
+}
+
+// دالة إنشاء الرسوم البيانية
+function renderBookingStatusChart(bookingStatusCounts, cancelledBy) {
+    const statusCtx = document.getElementById("bookingStatusChart").getContext("2d");
+    new Chart(statusCtx, {
+        type: "pie",
+        data: {
+            labels: Object.keys(bookingStatusCounts),
+            datasets: [{
+                data: Object.values(bookingStatusCounts),
+                backgroundColor: ["#FF6384", "#36A2EB", "#CC2B0AFF", "#4BC0C0"],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: "top" },
+            }
+        }
+    });
+
+    const cancelledCtx = document.getElementById("cancelledByChart").getContext("2d");
+    new Chart(cancelledCtx, {
+        type: "bar",
+        data: {
+            labels: Object.keys(cancelledBy),
+            datasets: [{
+                label: "Cancelled By",
+                data: Object.values(cancelledBy),
+                backgroundColor: ["#CC2B0AFF", "#36A2EB"],
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } },
+            plugins: { legend: { position: "top" } },
+        }
+    });
+}
+
+// استدعاء الدالة عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+    fetchBookings();
+});
+
+async function fetchLoginTrends() {
+    const userLogins = {};
+    try {
+        const querySnapshot = await getDocs(collection(dbUsers, "users"));
+        querySnapshot.forEach((docSnapshot) => {
+            const user = docSnapshot.data();
+            const lastLogin = user.lastLogin && user.lastLogin.seconds
+                ? new Date(user.lastLogin.seconds * 1000)
+                : null;
+
+            if (lastLogin) {
+                const yearMonth = `${lastLogin.getFullYear()}-${lastLogin.getMonth() + 1}`; // Format: YYYY-MM
+                userLogins[yearMonth] = (userLogins[yearMonth] || 0) + 1;
+            }
+        });
+
+        return userLogins;
+    } catch (error) {
+        console.error("Error fetching login trends:", error);
+    }
+    return {};
+}
+async function renderLoginTrendsChart() {
+    const loginTrends = await fetchLoginTrends();
+    const sortedMonths = Object.keys(loginTrends).sort();
+    const loginCounts = sortedMonths.map((month) => loginTrends[month]);
+
+    const ctx = document.getElementById("loginTrendsChart").getContext("2d");
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: sortedMonths, // X-axis: Months
+            datasets: [
+                {
+                    label: "Monthly User Logins",
+                    data: loginCounts, // Y-axis: Login counts
+                    borderColor: "#0077B6",
+                    backgroundColor: "rgba(0, 119, 182, 0.2)",
+                    borderWidth: 2,
+                    fill: true,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "top",
+                },
+                tooltip: {
+                    mode: "index",
+                },
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Months",
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Number of Logins",
+                    },
+                },
+            },
+        },
+    });
+}
+
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchUsers();
+            fetchData();
+            fetchProblems();
+            fetchCards();
+        
+            generateCharts();
+        });
+    </script>
+</body>
+</html>

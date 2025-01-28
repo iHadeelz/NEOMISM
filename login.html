@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neomism Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url("isoland.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: brightness(0.9);
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+  
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.9); /* زادت شدة الخلفية البيضاء */
+      padding: 40px; /* زيادة المسافة الداخلية */
+      border-radius: 15px; /* جعل الزوايا أكثر نعومة */
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* إضافة ظل أكبر */
+      width: 50%; /* الحاوية تأخذ نصف الشاشة */
+      max-width: 600px; /* أقصى عرض للحاوية */
+      text-align: center; /* لضمان التوسيط */
+      opacity: 0; /* إعداد للشفافية */
+      transform: translateY(20px); /* ابدأ بتحريك الحاوية للأسفل */
+      animation: fadeInSlideUp 1.5s ease-in-out forwards; /* تطبيق الحركة */
+    }
+  
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #005f8a;
+      font-size: 24px; /* حجم أكبر للعنوان */
+    }
+  
+    .login-container input {
+      width: 100%;
+      padding: 15px; /* زيادة مساحة الحقل */
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px; /* زوايا أكثر نعومة */
+      font-size: 16px; /* تحسين حجم الخط */
+      background-color: #f9f9f9; /* لون خلفية خفيف */
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+  
+    .login-container input:focus {
+      border-color: #0077B6; /* لون مميز عند التركيز */
+      box-shadow: 0 0 5px rgba(0, 119, 182, 0.5); /* ظل حول الحقل */
+      outline: none;
+    }
+  
+    .login-container button {
+      width: 100%;
+      padding: 15px;
+      background-color: #0077B6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+  
+    .login-container button:hover {
+      background-color: #005f8a;
+      transform: translateY(-2px); /* رفع الزر عند التمرير */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* تأثير ظل خفيف */
+    }
+  
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  
+    .logo-container {
+      text-align: center; /* يجعل الشعار في المنتصف */
+      margin-bottom: 20px; /* إضافة مسافة أسفل الشعار */
+    }
+  
+    .logo-container img {
+      width: 150px; /* زيادة حجم الشعار */
+      height: auto; /* الحفاظ على النسبة */
+    }
+  
+    .login-container .login-link {
+      margin-top: 20px;
+      font-size: 16px; /* تحسين حجم النص */
+      color: #333;
+    }
+  
+    .login-container .login-link a {
+      color: #0077B6;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+  
+    .login-container .login-link a:hover {
+      color: #005f8a; /* تغيير اللون عند التمرير */
+      text-decoration: underline;
+    }
+  
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  
+    @keyframes fadeInSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+ <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB6pzBFkIF6RV9rDSrX2C-Sa2xI2hBiVrE",
+        authDomain: "neom-web.firebaseapp.com",
+        projectId: "neom-web",
+        storageBucket: "neom-web.appspot.com",
+        messagingSenderId: "881751642763",
+        appId: "1:881751642763:web:d961fbe97db49c90c2ba8e",
+        measurementId: "G-4MLT5VWXNT"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const firestore = getFirestore(app);
+
+    // Function to sanitize email for Firestore document ID
+    function sanitizeEmail(email) {
+        return email.replace(/\./g, "_").replace(/@/g, "_at_");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const loginForm = document.getElementById("login-form");
+
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const errorMessages = document.getElementById("error-messages");
+
+            try {
+                // Clear previous error messages
+                errorMessages.textContent = "";
+
+                // Validate input fields
+                if (!email || !password) {
+                    errorMessages.textContent = "Please enter both email and password.";
+                    return;
+                }
+
+                // Admin credentials check
+                if (email === "admin@gmail.com" && password === "admin1") {
+                    window.location.href = "admin.html"; // Redirect to admin page
+                    return;
+                }
+
+                // Attempt to sign in the user
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Ensure user UID exists
+                if (!user.uid) {
+                    errorMessages.textContent = "Authentication failed. Please try again.";
+                    return;
+                }
+
+                // Sanitize email for Firestore document lookup
+                const sanitizedEmail = sanitizeEmail(email);
+                const userDoc = doc(firestore, "users", sanitizedEmail);
+
+                // Fetch the user document from Firestore
+                const docSnapshot = await getDoc(userDoc);
+
+                if (docSnapshot.exists()) {
+                    // Update lastLogin timestamp
+                    await setDoc(userDoc, { lastLogin: new Date().toISOString() }, { merge: true });
+
+                    // Redirect user to homepage
+                    window.location.href = "homepage.html";
+                } else {
+                    errorMessages.textContent = "User found in authentication but not in Firestore. Contact support.";
+                }
+            } catch (error) {
+                console.error("Error during login:", error);
+
+                // Handle specific authentication errors
+                if (error.code === "auth/user-not-found") {
+                    errorMessages.textContent = "No user found with this email. Please register first.";
+                } else if (error.code === "auth/wrong-password") {
+                    errorMessages.textContent = "Incorrect password. Please try again.";
+                } else if (error.code === "auth/invalid-email") {
+                    errorMessages.textContent = "Invalid email format.";
+                } else {
+                    errorMessages.textContent = "Login failed: " + error.message;
+                }
+            }
+        });
+    });
+</script>
+
+
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo-container">
+        <img src="logo1.png" alt="Neomism Logo" class="logo">
+      </div>
+    <h2>Login to Neomism</h2>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Enter your email" required>
+      <input type="password" id="password" placeholder="Enter your password" required>
+      <button type="submit">Login</button>
+      <div class="error" id="error-messages"></div>
+    </form>
+    <div class="login-link">
+        Don't have an account? <a href="sign up.html">Sign up</a>
+      </div>
+  </div>
+</body>
+</html>

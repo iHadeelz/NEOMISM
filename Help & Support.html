@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help & Support</title>
+  <style>
+ body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #cce7ff, #e6f3ff);
+      color: #333;
+      direction: ltr;
+    }
+
+    .header {
+      background-color: #0077B6;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header .logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+      animation: bounce 2s infinite;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: white;
+      color: #0077B6;
+      border: 1px solid #0077B6;
+      border-radius: 5px;
+      padding: 7px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .language-switch:hover {
+      background-color: #0077B6;
+      color: white;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #0077B6;
+      color: white;
+      border: 1px solid #0077B6;
+      border-radius: 5px;
+      padding: 7px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+  
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      color: #0077B6;
+      margin-bottom: 15px;
+    }
+
+    .content {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .content ul {
+      padding-left: 20px;
+      list-style-type: disc;
+    }
+
+    .content ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #0077B6;
+      color: white;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <div class="header">
+    <a href="setting.html" class="back-button">Back to Settings</a>
+    <img class="logo" src="logo1.png" alt="Neomism Logo">
+    <h1>Help & Support</h1>
+    <button class="language-switch" onclick="toggleLanguage()">عربي</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container" id="content-container">
+    <!-- Technical Issues -->
+    <div class="section">
+      <div class="section-title" data-en="Technical Issues" data-ar="مشاكل تقنية">Technical Issues</div>
+      <div class="content">
+        <ul>
+          <li data-en="Ensure your internet connection is stable." data-ar="تأكد من أن اتصالك بالإنترنت مستقر.">
+            Ensure your internet connection is stable.
+          </li>
+          <li data-en="Clear your browser cache if the issue persists." data-ar="قم بمسح ذاكرة التخزين المؤقت للمتصفح إذا استمرت المشكلة.">
+            Clear your browser cache if the issue persists.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Booking Issues -->
+    <div class="section">
+      <div class="section-title" data-en="Booking Issues" data-ar="مشاكل الحجز">Booking Issues</div>
+      <div class="content">
+        <ul>
+          <li data-en="Double-check your booking details for accuracy." data-ar="تحقق من تفاصيل الحجز بعناية.">
+            Double-check your booking details for accuracy.
+          </li>
+          <li data-en="If a slot is unavailable, try selecting an alternate date." data-ar="إذا لم يتوفر موعد، جرب اختيار تاريخ بديل.">
+            If a slot is unavailable, try selecting an alternate date.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Payment Issues -->
+    <div class="section">
+      <div class="section-title" data-en="Payment Issues" data-ar="مشاكل الدفع">Payment Issues</div>
+      <div class="content">
+        <ul>
+          <li data-en="Ensure your card details are entered correctly." data-ar="تأكد من إدخال تفاصيل البطاقة بشكل صحيح.">
+            Ensure your card details are entered correctly.
+          </li>
+          <li data-en="Contact your bank if the transaction fails repeatedly." data-ar="تواصل مع البنك إذا فشلت المعاملة بشكل متكرر.">
+            Contact your bank if the transaction fails repeatedly.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- General Support -->
+    <div class="section">
+      <div class="section-title" data-en="General Support" data-ar="الدعم العام">General Support</div>
+      <div class="content">
+        <ul>
+          <li data-en="Use the chatbot for quick answers." data-ar="استخدم روبوت الدردشة للحصول على إجابات سريعة.">
+            Use the chatbot for quick answers.
+          </li>
+          <li data-en="Reach out to our support team for unresolved issues." data-ar="تواصل مع فريق الدعم في حال عدم حل المشكلة.">
+            Reach out to our support team for unresolved issues.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer">
+    © 2024 Help & Support | All rights reserved.
+  </div>
+
+  <script>
+    let isArabic = false;
+
+    function toggleLanguage() {
+      isArabic = !isArabic;
+      const lang = isArabic ? 'ar' : 'en';
+      document.body.style.direction = isArabic ? 'rtl' : 'ltr';
+      document.querySelector('.language-switch').textContent = isArabic ? 'English' : 'عربي';
+
+      document.querySelectorAll('[data-en]').forEach(element => {
+        element.textContent = element.getAttribute(`data-${lang}`);
+      });
+    }
+  </script>
+</body>
+</html>

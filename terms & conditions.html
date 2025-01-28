@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms and Conditions</title>
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9fafc;
+      color: #333;
+      line-height: 1.8;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      text-align: center;
+      color: #004aad;
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin: 0 auto 20px;
+      animation: bounce 2s infinite;
+    }
+
+    .section {
+      margin-bottom: 20px;
+      border-left: 5px solid #004aad;
+      padding-left: 15px;
+      background-color: #f7f9fc;
+      padding: 15px;
+      border-radius: 5px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .section:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .section h2 {
+      font-size: 18px;
+      color: #004aad;
+      margin-bottom: 10px;
+    }
+
+    .section p {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    button {
+      background-color: #004aad;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    button:hover {
+      background-color: #00397a;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .language-switch {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: white;
+      color: #004aad;
+      border: 1px solid #004aad;
+      border-radius: 5px;
+      padding: 7px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .language-switch:hover {
+      background-color: #004aad;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 data-en="Terms and Conditions" data-ar="الشروط والأحكام">Terms and Conditions</h1>
+    <img class="logo" src="logo1.png" alt="Neomism Logo">
+    
+    <div class="section">
+      <h2 data-en="User Eligibility" data-ar="أهلية المستخدم">User Eligibility</h2>
+      <p data-en="The application is available for use by individuals aged 18 and above." data-ar="التطبيق متاح للاستخدام للأفراد الذين تبلغ أعمارهم 18 عامًا فما فوق.">
+        The application is available for use by individuals aged 18 and above.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2 data-en="User Responsibility" data-ar="مسؤولية المستخدم">User Responsibility</h2>
+      <p data-en="Users are responsible for ensuring the accuracy of the personal information provided." data-ar="يتحمل المستخدمون مسؤولية ضمان دقة المعلومات الشخصية المقدمة.">
+        Users are responsible for ensuring the accuracy of the personal information provided.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2 data-en="Data Usage and Privacy" data-ar="استخدام البيانات والخصوصية">Data Usage and Privacy</h2>
+      <p data-en="All personal data collected will be used in accordance with our Privacy Policy." data-ar="سيتم استخدام جميع البيانات الشخصية التي تم جمعها وفقًا لسياسة الخصوصية الخاصة بنا.">
+        All personal data collected will be used in accordance with our Privacy Policy.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2 data-en="Service Limitations" data-ar="حدود الخدمة">Service Limitations</h2>
+      <p data-en="The app does not guarantee the availability of all services at all times and may experience interruptions." data-ar="لا يضمن التطبيق توفر جميع الخدمات في جميع الأوقات وقد يواجه انقطاعات.">
+        The app does not guarantee the availability of all services at all times and may experience interruptions.
+      </p>
+    </div>
+
+    <div class="button-container">
+      <button onclick="goBack()">Back to Registration</button>
+    </div>
+  </div>
+
+  <button class="language-switch" onclick="toggleLanguage()">عربي</button>
+
+  <script>
+    let isArabic = false;
+
+    function toggleLanguage() {
+      isArabic = !isArabic;
+      const lang = isArabic ? 'ar' : 'en';
+      document.body.style.direction = isArabic ? 'rtl' : 'ltr';
+      document.querySelector('.language-switch').textContent = isArabic ? 'English' : 'عربي';
+
+      document.querySelectorAll('[data-en]').forEach(element => {
+        element.textContent = element.getAttribute(`data-${lang}`);
+      });
+    }
+
+    function goBack() {
+      window.location.href = 'sign up.html'; // Replace with your actual registration page URL
+    }
+  </script>
+</body>
+</html>

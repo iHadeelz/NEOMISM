@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report a Problem</title>
+  <img class="logo" src="logo1.png" alt="Neomism Logo">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #cce7ff, #e6f3ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .report-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      width: 500px;
+      text-align: center;
+      max-width: 100%;
+    }
+
+    .report-container h2 {
+      margin-bottom: 25px;
+      font-size: 24px;
+      color: #0077B6;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #fafafa;
+    }
+
+    .form-group input:disabled {
+      background-color: #e9ecef;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #0077B6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #005f8a;
+    }
+
+    .success {
+      color: green;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .error {
+      color: red;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+    .header .logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+      animation: bounce 2s infinite;
+    }
+  </style>
+<script type="module">
+    // استيراد وحدات Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+    // إعدادات Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6pzBFkIF6RV9rDSrX2C-Sa2xI2hBiVrE",
+      authDomain: "neom-web.firebaseapp.com",
+      projectId: "neom-web",
+      storageBucket: "neom-web.appspot.com",
+      messagingSenderId: "881751642763",
+      appId: "1:881751642763:web:d961fbe97db49c90c2ba8e",
+      measurementId: "G-4MLT5VWXNT"
+    };
+
+    // تهيئة Firebase
+    const app = initializeApp(firebaseConfig); // تهيئة التطبيق
+    const db = getFirestore(app); // تهيئة قاعدة بيانات Firestore
+    const auth = getAuth(app); // تهيئة نظام المصادقة
+
+    // دالة لتنظيف البريد الإلكتروني لاستعماله في قاعدة البيانات
+    function sanitizeEmail(email) {
+      return email.replace(/\./g, "_").replace(/@/g, "_at_");
+    }
+
+    // دالة لجلب بيانات المستخدم من Firestore
+    async function fetchUserData(email) {
+      const sanitizedEmail = sanitizeEmail(email); // تنظيف البريد الإلكتروني
+      const userDoc = doc(db, "users", sanitizedEmail); // إنشاء مرجع لمستند المستخدم
+      const docSnapshot = await getDoc(userDoc); // الحصول على بيانات المستند
+
+      if (docSnapshot.exists()) { // التحقق من وجود بيانات
+        const data = docSnapshot.data(); // جلب البيانات
+        document.getElementById("name").value = data.firstName || "مجهول"; // تعيين اسم المستخدم
+        document.getElementById("email").value = data.email || ""; // تعيين البريد الإلكتروني
+      } else {
+        alert("لم يتم العثور على بيانات للمستخدم!"); // تنبيه إذا لم توجد بيانات
+      }
+    }
+
+    // دالة لحفظ وصف المشكلة في Firestore
+    async function saveProblem(email) {
+      const problemDescription = document.getElementById("problem").value; // جلب وصف المشكلة من الحقل
+      const name = document.getElementById("name").value; // جلب اسم المستخدم
+
+      if (!problemDescription) { // التحقق من أن الحقل ليس فارغًا
+        alert("يرجى وصف المشكلة."); // تنبيه إذا كان الحقل فارغًا
+        return; // إنهاء الدالة
+      }
+
+      try {
+        await addDoc(collection(db, "problems"), { // إضافة مستند جديد في مجموعة "problems"
+          userId: sanitizeEmail(email), // ربط المشكلة بمعرف المستخدم
+          name: name, // اسم المستخدم
+          email: email, // بريد المستخدم
+          description: problemDescription, // وصف المشكلة
+          timestamp: serverTimestamp() // توقيت الإرسال
+        });
+
+        // عرض رسالة نجاح وتنظيف الحقل
+        document.getElementById("successMessage").textContent = `شكرًا لك، ${name}. تم إرسال تقريرك بنجاح!`;
+        document.getElementById("successMessage").style.display = "block"; // عرض رسالة النجاح
+        document.getElementById("problem").value = ""; // تنظيف حقل وصف المشكلة
+      } catch (error) {
+        console.error("خطأ أثناء إرسال المشكلة: ", error); // طباعة الخطأ في وحدة التحكم
+        alert("حدث خطأ أثناء إرسال تقريرك. يرجى المحاولة مرة أخرى."); // تنبيه عند حدوث خطأ
+      }
+    }
+
+    // تهيئة التطبيق عند تحميل الصفحة
+    window.onload = () => {
+      onAuthStateChanged(auth, (user) => { // التحقق من حالة تسجيل الدخول
+        if (user) { // إذا كان المستخدم مسجلاً الدخول
+          const email = user.email; // جلب البريد الإلكتروني للمستخدم
+          fetchUserData(email); // جلب بيانات المستخدم
+
+          // إضافة مستمع للنقر على زر إرسال المشكلة
+          document.getElementById("submitProblem").addEventListener("click", () => {
+            saveProblem(email); // حفظ المشكلة عند الضغط
+          });
+        } else {
+          alert("لا يوجد مستخدم مسجل الدخول!"); // تنبيه عند عدم وجود مستخدم مسجل
+          window.location.href = "login.html"; // إعادة التوجيه إلى صفحة تسجيل الدخول
+        }
+      });
+    };
+</script>
+
+  
+</head>
+<body>
+  <div class="report-container">
+    <h2>Report a Problem</h2>
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" disabled>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" disabled>
+    </div>
+    <div class="form-group">
+      <label for="problem">Problem Description:</label>
+      <textarea id="problem" placeholder="Describe the issue"></textarea>
+    </div>
+    <button type="button" id="submitProblem" class="btn">Submit</button>
+    <p id="successMessage" class="success" style="display: none;"></p>
+  </div>
+</body>
+</html>
